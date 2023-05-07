@@ -1,0 +1,20 @@
+Initial Setup:
+1. Running git config --global user.email "bob@bob.com"
+2. Running git config --global user.name "Bob Bob"
+3. Create a private repository on github
+4. Copy the URL for it (under code then click the green clipboard)
+5. Git clone https://github.com/ShakaUVM/volleyball.git (or whatever the URL was)
+6. Add a contributor (your partner, and they need to accept the invite) under settings
+7. Get a Personal Access Token (under settings -> developer settings -> personal access tokens)
+ This is basically your password when you push to your repo, so write it down
+
+Workflow:
+1. git pull to get the latest version (only do this if there's changes on the repo)
+2. Edit your files and get them working the way you like it
+3. git add .
+4. git commit -m "Change Message"
+5. git push
+
+Repeat steps 1 through 5 all the time
+
+Recommend taking turns or working on different files to avoid merge conflicts
