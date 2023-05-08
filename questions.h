@@ -61,39 +61,92 @@ class Question{
 					lhs.get_answer_db() == rhs.get_answer_db());
 		}
 
-	/*	friend auto operator<=>(const Question& lhs, const Question& rhs) {
-			return tie(lhs.question,lhs.correctAnswer) <=> tie(rhs.question, rhs.correctAnswer);
+		friend ostream& operator<<(ostream& os, Question& rhs){
+			vector<string> answer_temp = rhs.answer_db;
+			string q = rhs.question;
+			size_t pos = q.find("\\n");
+			while(pos != string::npos){
+				q.replace(pos, 2, "\n");
+				pos = q.find("\\n", pos + 1);
+			}
+			rhs.question = q;
+
+			os << "Question: " << rhs.question << endl;
+			default_random_engine g(time(0));
+			shuffle(answer_temp.begin(), answer_temp.end(), g);
+			for (size_t i = 0; i < answer_temp.size(); i++) {
+				os << static_cast<char>(i + 65)  << ". " << answer_temp.at(i) << endl;
+			}
+		//	os	<< "Correct Answer: " << rhs.correctAnswer << endl;
+			return os;
 		}
-	*/
+
+		/*	friend auto operator<=>(const Question& lhs, const Question& rhs) {
+			return tie(lhs.question,lhs.correctAnswer) <=> tie(rhs.question, rhs.correctAnswer);
+			}
+			*/
 
 };
-		 void load_questions (vector<Question> &question_db, string fileName = "questions.txt"){
-			ifstream ins (fileName);
-			if(!ins) cerr << "Error opening Questions file!\n";
-			while(true){
-				Question temp;
-				vector<string> tempAnswers;
-				string question = readline(ins);
+void load_questions (vector<Question> &question_db, string fileName = "questions.txt"){
+	ifstream ins (fileName);
+	if(!ins) cerr << "Error opening Questions file!\n";
+	while(true){
+		Question temp;
+		vector<string> tempAnswers;
+		string question = readline(ins);
 
-				string answer1 = readline(ins);
-				tempAnswers.push_back(answer1);
+		string answer1 = readline(ins);
+		tempAnswers.push_back(answer1);
 
-				string answer2 = readline(ins);
-				tempAnswers.push_back(answer2);
+		string answer2 = readline(ins);
+		tempAnswers.push_back(answer2);
 
-				string answer3 = readline(ins);
-				tempAnswers.push_back(answer3);
+		string answer3 = readline(ins);
+		tempAnswers.push_back(answer3);
 
-				string answer4 = readline(ins);
-				tempAnswers.push_back(answer4);
+		string answer4 = readline(ins);
+		tempAnswers.push_back(answer4);
 
-				temp.set_question(question);
-				temp.set_correctAnswer(answer1);
-				temp.set_answer_db(tempAnswers);
+		temp.set_question(question);
+		temp.set_correctAnswer(answer1);
+		temp.set_answer_db(tempAnswers);
 
-				if(!ins) break;
-				question_db.push_back(temp);
+		if(!ins) break;
+		question_db.push_back(temp);
 
-			}
-		}
+	}
+}
 
+
+[[nodiscard]]
+bool random_question(vector<Question> &question_db){
+	int index = rand() % question_db.size();
+	Question temp = question_db.at(index); 
+	cout << temp;
+	char input = read("Please enter A) B) C) D)\n");
+	input = toupper(input);
+	if(input < 65 or input > 68) cerr << "BAD INPUT" << endl; //FIXME change this to handle bad input...
+	return ((temp.get_answer_db().at(input - 65)) == temp.get_correctAnswer()) ? true : false;
+}
+/*
+   vector<string> answer_temp = answer_db;
+   string q = question;
+   size_t pos = q.find("\\n");
+   while(pos != string::npos){
+   q.replace(pos, 2, "\n");
+   pos = q.find("\\n", pos + 1);
+   }
+   cout << q << endl;
+   default_random_engine g(time(0));
+   shuffle(answer_temp.begin(), answer_temp.end(), g);
+   char correctChar = 'z';
+   for (size_t i = 0; i < answer_temp.size(); i++) {
+   if(answer_temp.at(i) == correctAnswer) correctChar = static_cast<char>(i+65);
+   cout << static_cast<char>(i + 65)  << ". " << answer_temp.at(i) << endl;
+   }
+   char input = read("Please enter A) B) C) D)\n");
+   input = toupper(input);
+   return retval = (correctChar == input) ? true : false;
+   }
+
+*/
