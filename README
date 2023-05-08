@@ -32,7 +32,7 @@ you run your server, you must pick a port number, and pick a port number
 different from that of anyone else in the class (only one person can have a
 given port open). When you run your client, you will punch in localhost (the
 server you are on) and the port number you picked to connect to it. The demo
-code will create an iostream that you can read and write to just like a file
+ccctypeodewill create an iostream that you can read and write to just like a file
 or just like cin and cout.
 
 Grading: You will get 10 points for each design criteria you complete.

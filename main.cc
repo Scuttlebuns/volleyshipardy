@@ -1,6 +1,6 @@
 #include "/public/read.h"
 #include "questions.h" 
-#include "players.h" 
+#include "volley.h" 
 #include <vector>
 #include <sstream>
 #include <string>
@@ -10,23 +10,26 @@
 #include <chrono>
 using namespace std;
 
-default_random_engine gen(time(0));
-vector<Question> question_db;
 
 int main(){
 	srand(time(0));
+	default_random_engine gen(time(0));
+	vector<Question> question_db;
 	load_questions(question_db);
 	//default_random_engine g(time(0));
 	//shuffle(question_db.begin(), question_db.end(), g);
 	//cout << question_db.size() << endl;
-	for(int i = 0; i < 5; i++){
+/*	for(int i = 0; i < 5; i++){
 		cout << boolalpha << (random_question(question_db) ? true : false) << endl;
-	}
+	}*/
 	Player player1("Player 1");
 	Player player2("Player 2");
-	bool player1Turn = true;
 
-	cout <<	question_db.at(6);
+	while (true){
+		jepFullRound(player1, player2, question_db);
+		if (player1.get_score() or player2.get_score()) break;
+	}
+
 }
 /*
    for(auto x : question_db) {
