@@ -77,7 +77,7 @@ class Question{
 			for (size_t i = 0; i < answer_temp.size(); i++) {
 				os << static_cast<char>(i + 65)  << ". " << answer_temp.at(i) << endl;
 			}
-		//	os	<< "Correct Answer: " << rhs.correctAnswer << endl;
+			//	os	<< "Correct Answer: " << rhs.correctAnswer << endl;
 			return os;
 		}
 
@@ -116,7 +116,15 @@ void load_questions (vector<Question> &question_db, string fileName = "questions
 
 	}
 }
+/*
 
+[[nodiscard]]
+string test_question(vector<Question> &question_db, char userInput, size_t questionIndex){
+	Question temp = question_db.at(questionIndex); 
+	userInput = toupper(userInput);
+	if(userInput < 65 or userInput > 68) return "Error: BAD INPUT!";
+	return ((temp.get_answer_db().at(userInput - 65)) == temp.get_correctAnswer()) ? "True" : "False";
+}
 
 [[nodiscard]]
 bool random_question(vector<Question> &question_db){
@@ -128,25 +136,16 @@ bool random_question(vector<Question> &question_db){
 	if(input < 65 or input > 68) cerr << "BAD INPUT" << endl; //FIXME change this to handle bad input...
 	return ((temp.get_answer_db().at(input - 65)) == temp.get_correctAnswer()) ? true : false;
 }
-/*
-   vector<string> answer_temp = answer_db;
-   string q = question;
-   size_t pos = q.find("\\n");
-   while(pos != string::npos){
-   q.replace(pos, 2, "\n");
-   pos = q.find("\\n", pos + 1);
-   }
-   cout << q << endl;
-   default_random_engine g(time(0));
-   shuffle(answer_temp.begin(), answer_temp.end(), g);
-   char correctChar = 'z';
-   for (size_t i = 0; i < answer_temp.size(); i++) {
-   if(answer_temp.at(i) == correctAnswer) correctChar = static_cast<char>(i+65);
-   cout << static_cast<char>(i + 65)  << ". " << answer_temp.at(i) << endl;
-   }
-   char input = read("Please enter A) B) C) D)\n");
-   input = toupper(input);
-   return retval = (correctChar == input) ? true : false;
-   }
-
 */
+
+Question random_question(vector<Question> &question_db){
+	int index = rand() % question_db.size();
+	return question_db.at(index);
+}
+
+string answer_question(Question &tempQuestion, char input, vector<Question> &question_db){
+	if(input < 65 or input > 68) return "ERROR: BAD INPUT!";
+	else if ((tempQuestion.get_answer_db().at(input - 65)) == tempQuestion.get_correctAnswer()) return "true";
+	else return "false";
+
+}
