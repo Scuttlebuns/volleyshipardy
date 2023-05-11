@@ -1,10 +1,8 @@
-all: client server
+a.out: main.o questions.h volley.h games.h
+	g++ -g -Og main.cc -lgtest -pthread
 
-client: client.cc common.h
-	g++ -pthread -O3 -g -o client client.cc
-
-server: server.cc common.h
-	g++ -pthread -O3 -g -o server server.cc
+main.o: main.cc questions.h volley.h games.h
+	g++ -g -Og main.cc -lgtest -pthread
 
 clean:
-	rm -f *.o a.out core
+	rm -f a.out core *.o

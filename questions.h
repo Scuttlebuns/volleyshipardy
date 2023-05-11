@@ -87,6 +87,7 @@ class Question{
 			*/
 
 };
+extern vector<Question> test_db;
 void load_questions (vector<Question> &question_db, string fileName = "questions.txt"){
 	ifstream ins (fileName);
 	if(!ins) cerr << "Error opening Questions file!\n";
@@ -113,7 +114,7 @@ void load_questions (vector<Question> &question_db, string fileName = "questions
 
 		if(!ins) break;
 		question_db.push_back(temp);
-
+		test_db.push_back(temp);
 	}
 }
 /*
@@ -143,7 +144,7 @@ Question random_question(vector<Question> &question_db){
 	return question_db.at(index);
 }
 
-string answer_question(Question &tempQuestion, char input, vector<Question> &question_db){
+string answer_question(Question &tempQuestion, char input){
 	if(input < 65 or input > 68) return "ERROR: BAD INPUT!";
 	else if ((tempQuestion.get_answer_db().at(input - 65)) == tempQuestion.get_correctAnswer()) return "true";
 	else return "false";

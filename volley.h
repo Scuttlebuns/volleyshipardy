@@ -19,7 +19,7 @@ bool jepHalfRound(double timeToBeat, chrono::duration<double> &elapsed, Question
 	char input = read("Enter: A. B. C. D.\n");//FIXME vet !cin
 	input = toupper(input);
 	//if (!answer_question(tempQuestion, input)) return false;
-	if(answer_question(tempQuestion, input, question_db) == "false") return false;
+	if(answer_question(tempQuestion, input) == "false") return false;
 	else {
 		auto end = chrono::high_resolution_clock::now();
 		elapsed = end - start;
