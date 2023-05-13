@@ -62,6 +62,25 @@ class Question{
 		}
 
 		friend ostream& operator<<(ostream& os, Question& rhs){
+			string q = rhs.question;
+			size_t pos = q.find("\\n");
+			while(pos != string::npos){
+				q.replace(pos, 2, "\n");
+				pos = q.find("\\n", pos + 1);
+			}
+			rhs.question = q;
+
+			os << "Question: " << rhs.question << endl;
+			default_random_engine g(time(0));
+			shuffle(rhs.answer_db.begin(), rhs.answer_db.end(), g);
+			for (size_t i = 0; i < rhs.answer_db.size(); i++) {
+				os << static_cast<char>(i + 65)  << ". " << rhs.answer_db.at(i) << endl;
+			}
+				os	<< "Correct Answer: " << rhs.correctAnswer << endl; // FIXME: THIS IS ONLY FOR DEBUG< REMOVE>
+			return os;
+		}
+/*
+		friend ostream& operator<<(ostream& os, Question& rhs){
 			vector<string> answer_temp = rhs.answer_db;
 			string q = rhs.question;
 			size_t pos = q.find("\\n");
@@ -80,7 +99,7 @@ class Question{
 				os	<< "Correct Answer: " << rhs.correctAnswer << endl; // FIXME: THIS IS ONLY FOR DEBUG< REMOVE>
 			return os;
 		}
-
+		*/
 		/*	friend auto operator<=>(const Question& lhs, const Question& rhs) {
 			return tie(lhs.question,lhs.correctAnswer) <=> tie(rhs.question, rhs.correctAnswer);
 			}

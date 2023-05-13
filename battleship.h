@@ -2,7 +2,7 @@
 #include <vector>
 #include <cstdlib>
 #include <ctime>
-
+#include "interactions.h"
 using namespace std;
 
 const int BOARD_SIZE = 7;
@@ -33,14 +33,11 @@ class Board {
 		int shipsRemaining;
 	public:
 		Board() {
-		    board = vector<vector<char>>(BOARD_SIZE, vector<char>(BOARD_SIZE, '-'));
-		    shipsRemaining = NUM_SHIPS;
+			board = vector<vector<char>>(BOARD_SIZE, vector<char>(BOARD_SIZE, '-'));
+			shipsRemaining = NUM_SHIPS;
 		}
 
 		char getPosition(int row, int col) const { return board.at(row).at(col); }
-
-
-
 
 		void print() {
 			cout << "  ";
@@ -51,16 +48,15 @@ class Board {
 			for (int i = 0; i < BOARD_SIZE; i++) {
 				cout << static_cast<char>(i+65) << " ";
 				for (int j = 0; j < BOARD_SIZE; j++) {
-					cout << board.at(i).at(j) << " ";
+					if (board.at(i).at(j) == '#') cout << '-' << " ";
+					else cout << board.at(i).at(j) << " ";
 				}
 				cout << endl;
 			}
 		}
 
 		bool placeShip(int row, int col, int size, bool horizontal) {
-			if (row < 0 || row >= BOARD_SIZE || col < 0 || col >= BOARD_SIZE)
-				return false;
-
+			if (row < 0 || row >= BOARD_SIZE || col < 0 || col >= BOARD_SIZE) return false;
 			if (horizontal) {
 				if (col + size > BOARD_SIZE)
 					return false;
@@ -87,17 +83,14 @@ class Board {
 					board.at(i).at(col) = '#';
 				}
 			}
-
 			return true;
 		}
 
 		bool attack(int row, int col) {
-			if (row < 0 || row >= BOARD_SIZE || col < 0 || col >= BOARD_SIZE)
-				return false;
-
+			if (row < 0 || row >= BOARD_SIZE || col < 0 || col >= BOARD_SIZE) return false;
+			if (board.at(row).at(col) == 'X' or board.at(row).at(col) == 'O') return false;
 			if (board.at(row).at(col) == '#') {
 				board.at(row).at(col)  = 'X';
-
 				for (Ship& ship : ships) {
 					if (!ship.isSunk()) {
 						ship.add_hit();
@@ -110,7 +103,6 @@ class Board {
 			else if (board.at(row).at(col) == '-') {
 				board.at(row).at(col) = 'O';
 			}
-
 			return true;
 		}
 
@@ -125,8 +117,8 @@ void randomizeShips(Board& board) {
 
 	for (int i = 0; i < NUM_SHIPS; i++) {
 		bool placed = false;
-			
-			while(!placed){
+
+		while(!placed){
 			int row = rand() % BOARD_SIZE;
 			int col = rand() % BOARD_SIZE;
 			bool horizontal = rand() % 2 == 0;
@@ -137,30 +129,35 @@ void randomizeShips(Board& board) {
 	}
 }
 
-//void battleShipRound(Board &pBoard){	
-//}
-/*
-int main() {
-	Board board;
 
-	// Randomly place ships
-	randomizeShips(board);
+void battleshipTurn(Board &playerBoard, Player &player){
+	cout << "Welcome to battleship!, you have 3 chances to hit the enemy ships!" << endl;
+	cout << player.get_name() << " turn!" << endl;
+	//	dialog("Welcome to battleship!, you have 3 chances to hit the enemy ships!");
+	//		return;
+	int turns = 3;
+	while (turns > 0){
+		cout << turns << " turns remaining " << endl;
+		char row = 'Z';
+		int col = 100;
 
-	// Game logic
-	int row, col;
-	while (!board.gameOver()) {
-		board.print();
-
-		cout << "Enter row and column to attack (0-" << BOARD_SIZE - 1 << "): ";
-		cin >> row >> col;
-
-		if (!board.attack(row, col)) {
-			cout << "Invalid move! Try again." << endl;
+		playerBoard.print();
+			cout << "Enter (ROW, COL) to attack: ";
+			cin >> row >> col;
+			row = toupper(row);
+		int iRow = static_cast<int>(row-65);
+		if (!playerBoard.attack(iRow, col)) {
+			cout << "INVALID MOVE, try again!" << endl;
+		}
+		else if (playerBoard.getPosition(iRow, col) == 'X'){
+			cout << "HIT" << endl;
+			turns--;
+		}
+		else {
+			cout << "MISS" << endl;
+			turns--;
 		}
 	}
-
-	cout << "Congratulations! You have sunk all the ships!" << endl;
-
-	return 0;
+	playerBoard.print(); //prints board on turn 3
+	player.set_turn(false);
 }
-*/

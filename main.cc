@@ -43,10 +43,10 @@ TEST(answer_question, BadTest){
 
 //Edge Cases
 TEST(answer_question, EdgeTests){
-	EXPECT_EQ(answer_question(test_db.at(0), 'a'), "ERROR: BAD INPUT!");
-	EXPECT_EQ(answer_question(test_db.at(1), 'b'), "ERROR: BAD INPUT!");
-	EXPECT_EQ(answer_question(test_db.at(2), 'c'), "ERROR: BAD INPUT!");
-	EXPECT_EQ(answer_question(test_db.at(3), 'd'), "ERROR: BAD INPUT!");
+	EXPECT_EQ(answer_question(test_db.at(0), 'a'), "true");
+	EXPECT_EQ(answer_question(test_db.at(1), 'b'), "false");
+	EXPECT_EQ(answer_question(test_db.at(2), 'c'), "false");
+	EXPECT_EQ(answer_question(test_db.at(3), 'd'), "false");
 	EXPECT_EQ(answer_question(test_db.at(4), 'F'), "ERROR: BAD INPUT!");
 	EXPECT_EQ(answer_question(test_db.at(5), '@'), "ERROR: BAD INPUT!");
 	EXPECT_EQ(answer_question(test_db.at(50), 'A'), "true");
@@ -61,39 +61,28 @@ int main(int argc, char** argv) {
 	default_random_engine gen(time(0));
 	//Question Database
 	load_questions(question_db);
-	char x = read("Press 'D' for debug mode\n (Press anything else to startgame)\n");
-	if (x == 'D') return RUN_ALL_TESTS();
 
-	//Init Plaers, and Boards
-	Player player1("Player 1");
-	Board p1Board;
-	randomizeShips(p1Board);
-	Player player2("Player 2");
-	Board p2Board;
-	randomizeShips(p2Board);
+//	cout << ("Press '0' for debug mode\n (Press anything else to startgame)\n");
+//	int x = -10;
+	//cin >> x;
+	//if (x == 0) return RUN_ALL_TESTS();
 
-	while (!p1Board.gameOver() or !p2Board.gameOver()){
-		jepFullRound(player1, player2, question_db);
-		if (player1.get_score()){
-			cout << "Welcome to battleship!, you have 3 chances to hit the enemy ships!" << endl;
-			int turns = 3;
-			while(turns > 0){
-				char row = 'Z';
-				int col = 0;
-				p2Board.print();
-				cout << "Enter (ROW, COL to attack: ";
-				cin >> row >> col;
-				int iRow = static_cast<int>(row - 65);
-				if(!p2Board.attack(iRow, col)) { 
-					cout << "INVAILD MOVE, try again!" << endl;
-				}
-				else if(p2Board.getPosition(iRow, col) == '#') cout << "HIT" << endl;
-				else cout << "MISS" << endl;
-				turns--;
-				cout << turns << " remain." << endl;
+		//Init Plaers, and Boards
+		Player player1("Player 1");
+		Board p1Board;
+		randomizeShips(p1Board);
+		Player player2("Player 2");
+		Board p2Board;
+		randomizeShips(p2Board);
+
+		while (!p1Board.gameOver() or !p2Board.gameOver()){
+			jepFullRound(player1, player2, question_db);
+			if (player1.get_turn()){
+				battleshipTurn(p2Board, player1);
+			}
+			else if (player2.get_turn()){
+				battleshipTurn(p1Board, player2);
 			}
 		}
-	}
-
 }
 

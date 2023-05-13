@@ -17,9 +17,11 @@ bool jepHalfRound(double timeToBeat, chrono::duration<double> &elapsed, Question
 	auto start = chrono::high_resolution_clock::now();
 	cout << tempQuestion << endl;
 	char input = read("Enter: A. B. C. D.\n");//FIXME vet !cin
-	input = toupper(input);
-	//if (!answer_question(tempQuestion, input)) return false;
-	if(answer_question(tempQuestion, input) == "false") return false;
+											  //input = toupper(input);
+											  //if (!answer_question(tempQuestion, input)) return false;
+	if(answer_question(tempQuestion, input) == "false"){ 
+		return false;
+	}
 	else {
 		auto end = chrono::high_resolution_clock::now();
 		elapsed = end - start;
@@ -56,6 +58,6 @@ void jepFullRound(Player &Player1, Player &Player2, vector<Question> &question_d
 	else {
 		cout << "Neither player was successful." << endl;
 	}
-	if (player1) Player1.increment_score();
-	if (player2) Player2.increment_score();
+	if (player1) Player1.set_turn(true);
+	if (player2) Player2.set_turn(true);
 }
