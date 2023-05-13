@@ -77,7 +77,7 @@ class Question{
 			for (size_t i = 0; i < answer_temp.size(); i++) {
 				os << static_cast<char>(i + 65)  << ". " << answer_temp.at(i) << endl;
 			}
-			//	os	<< "Correct Answer: " << rhs.correctAnswer << endl;
+				os	<< "Correct Answer: " << rhs.correctAnswer << endl; // FIXME: THIS IS ONLY FOR DEBUG< REMOVE>
 			return os;
 		}
 
@@ -145,6 +145,7 @@ Question random_question(vector<Question> &question_db){
 }
 
 string answer_question(Question &tempQuestion, char input){
+	input = toupper(input);
 	if(input < 65 or input > 68) return "ERROR: BAD INPUT!";
 	else if ((tempQuestion.get_answer_db().at(input - 65)) == tempQuestion.get_correctAnswer()) return "true";
 	else return "false";

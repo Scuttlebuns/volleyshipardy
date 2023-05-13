@@ -1,7 +1,7 @@
-a.out: main.o questions.h volley.h games.h
+a.out: main.o questions.h volley.h 
 	g++ -g -Og main.cc -lgtest -pthread
 
-main.o: main.cc questions.h volley.h games.h
+main.o: main.cc questions.h volley.h 
 	g++ -g -Og main.cc -lgtest -pthread
 
 clean:

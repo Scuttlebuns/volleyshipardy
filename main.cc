@@ -1,6 +1,7 @@
 #include "/public/read.h"
 #include "questions.h" 
 #include "volley.h" 
+#include "battleship.h"
 #include <gtest/gtest.h>
 #include <vector>
 #include <sstream>
@@ -60,14 +61,39 @@ int main(int argc, char** argv) {
 	default_random_engine gen(time(0));
 	//Question Database
 	load_questions(question_db);
-	return RUN_ALL_TESTS();
-	
-	Player player1("Player 1");
-	Player player2("Player 2");
+	char x = read("Press 'D' for debug mode\n (Press anything else to startgame)\n");
+	if (x == 'D') return RUN_ALL_TESTS();
 
-	while (true){
+	//Init Plaers, and Boards
+	Player player1("Player 1");
+	Board p1Board;
+	randomizeShips(p1Board);
+	Player player2("Player 2");
+	Board p2Board;
+	randomizeShips(p2Board);
+
+	while (!p1Board.gameOver() or !p2Board.gameOver()){
 		jepFullRound(player1, player2, question_db);
-		if (player1.get_score() or player2.get_score()) break;
+		if (player1.get_score()){
+			cout << "Welcome to battleship!, you have 3 chances to hit the enemy ships!" << endl;
+			int turns = 3;
+			while(turns > 0){
+				char row = 'Z';
+				int col = 0;
+				p2Board.print();
+				cout << "Enter (ROW, COL to attack: ";
+				cin >> row >> col;
+				int iRow = static_cast<int>(row - 65);
+				if(!p2Board.attack(iRow, col)) { 
+					cout << "INVAILD MOVE, try again!" << endl;
+				}
+				else if(p2Board.getPosition(iRow, col) == '#') cout << "HIT" << endl;
+				else cout << "MISS" << endl;
+				turns--;
+				cout << turns << " remain." << endl;
+			}
+		}
 	}
 
 }
+

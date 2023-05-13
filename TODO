@@ -1,0 +1,15 @@
+In main:
+	-fix bugs with "HIT and MISS" in battleship
+In Volley:
+	-round 1 of volleyball does not work, always wrong
+In Question:
+	- vet of invalid input //FIXME TAKE OUT THE CORRECT ANSWER
+
+In Battleship:
+	- just buggy
+	- need to not print enemy ships when a turn happens
+	- need to move code from main, and make a function for a round of battleship
+
+TBD:
+-TUI?
+-Ncurses?
