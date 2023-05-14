@@ -2,6 +2,7 @@
 #include <vector>
 #include <cstdlib>
 #include <ctime>
+#include <sstream>
 #include "interactions.h"
 using namespace std;
 
@@ -129,7 +130,6 @@ void randomizeShips(Board& board) {
 	}
 }
 
-
 void battleshipTurn(Board &playerBoard, Player &player){
 	cout << "Welcome to battleship!, you have 3 chances to hit the enemy ships!" << endl;
 	cout << player.get_name() << " turn!" << endl;
@@ -142,9 +142,33 @@ void battleshipTurn(Board &playerBoard, Player &player){
 		int col = 100;
 
 		playerBoard.print();
-			cout << "Enter (ROW, COL) to attack: ";
-			cin >> row >> col;
-			row = toupper(row);
+		cout << "Enter (ROW, COL) to attack: ";
+
+		while (true) {
+			try {
+				if (!(cin >> row >> col)) {
+					throw runtime_error("Invalid input! Enter (ROW COL) to attack.");
+				}
+
+				//clears buffer;
+				cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+				row = toupper(row);
+				if ((row >= 'A' && row <= 'G') && (col >= 0 && col <= 6)) {
+					break;
+				} else {
+					throw runtime_error("Invalid input! Enter (ROW COL) to attack.");
+				}
+			} catch (const exception& e) {
+				cout << e.what() << endl;
+				cout << "Please try again." << endl;
+
+				//clears buffer
+				cin.clear();
+				cin.ignore(numeric_limits<streamsize>::max(), '\n');
+			}
+		}
+
 		int iRow = static_cast<int>(row-65);
 		if (!playerBoard.attack(iRow, col)) {
 			cout << "INVALID MOVE, try again!" << endl;
