@@ -8,7 +8,7 @@
 #include <chrono>
 #include <utility>
 #include <cmath>
-#include "/public/read.h"
+#include "read.h"
 #include "questions.h"
 #include "players.h"
 using namespace std;

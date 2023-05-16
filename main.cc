@@ -1,4 +1,4 @@
-#include "/public/read.h"
+#include "read.h"
 #include "questions.h" 
 #include "volley.h" 
 #include "battleship.h"
@@ -13,6 +13,9 @@
 using namespace std;
 //Global test_vector for GTest
 vector<Question> test_db;
+
+//Looks good, just need to make a bit more progress, since the project is due tomorrow
+// - Alex~
 
 //GOOGLE TEST:
 //Good Test
@@ -62,10 +65,10 @@ int main(int argc, char** argv) {
 	//Question Database
 	load_questions(question_db);
 
-//	cout << ("Press '0' for debug mode\n (Press anything else to startgame)\n");
-//	int x = -10;
-	//cin >> x;
-	//if (x == 0) return RUN_ALL_TESTS();
+	cout << ("Press '0' for debug mode\n (Press anything else to startgame)\n");
+	int x = -10;
+	cin >> x;
+	if (x == 0) return RUN_ALL_TESTS();
 
 		//Init Plaers, and Boards
 		Player player1("Player 1");

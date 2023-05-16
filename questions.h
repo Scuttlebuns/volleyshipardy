@@ -1,13 +1,12 @@
 #pragma once
 
-#include "/public/read.h"
+#include "read.h"
 #include <vector>
 #include <algorithm>
 #include <sstream>
 #include <random>
 #include <string>
 #include <cctype>
-#include <compare>
 using namespace std;
 
 

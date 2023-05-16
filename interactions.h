@@ -1,5 +1,5 @@
-#include "/public/read.h"
-#include "/public/colors.h"
+#include "read.h"
+#include "colors.h"
 #include <string>
 #include <vector>
 using namespace std;
