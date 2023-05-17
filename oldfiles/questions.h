@@ -1,14 +1,12 @@
 #pragma once
 
 #include "read.h"
-#include "interactions.h"
 #include <vector>
 #include <algorithm>
 #include <sstream>
 #include <random>
 #include <string>
 #include <cctype>
-#include <compare>
 using namespace std;
 
 
@@ -70,19 +68,44 @@ class Question{
 				pos = q.find("\\n", pos + 1);
 			}
 			rhs.question = q;
-			os << BLUE << "Question: " << rhs.question << RESET <<endl;
+
+			os << "Question: " << rhs.question << endl;
 			default_random_engine g(time(0));
 			shuffle(rhs.answer_db.begin(), rhs.answer_db.end(), g);
 			for (size_t i = 0; i < rhs.answer_db.size(); i++) {
-				os << MAGENTA << static_cast<char>(i + 65)  << ". " << rhs.answer_db.at(i) << RESET << endl;
+				os << static_cast<char>(i + 65)  << ". " << rhs.answer_db.at(i) << endl;
 			}
-	//		os << GREEN	<< "Correct Answer: " << rhs.correctAnswer << RESET << endl; // FIXME: THIS IS ONLY FOR DEBUG< REMOVE>
+				os	<< "Correct Answer: " << rhs.correctAnswer << endl; // FIXME: THIS IS ONLY FOR DEBUG< REMOVE>
 			return os;
 		}
+/*
+		friend ostream& operator<<(ostream& os, Question& rhs){
+			vector<string> answer_temp = rhs.answer_db;
+			string q = rhs.question;
+			size_t pos = q.find("\\n");
+			while(pos != string::npos){
+				q.replace(pos, 2, "\n");
+				pos = q.find("\\n", pos + 1);
+			}
+			rhs.question = q;
+
+			os << "Question: " << rhs.question << endl;
+			default_random_engine g(time(0));
+			shuffle(answer_temp.begin(), answer_temp.end(), g);
+			for (size_t i = 0; i < answer_temp.size(); i++) {
+				os << static_cast<char>(i + 65)  << ". " << answer_temp.at(i) << endl;
+			}
+				os	<< "Correct Answer: " << rhs.correctAnswer << endl; // FIXME: THIS IS ONLY FOR DEBUG< REMOVE>
+			return os;
+		}
+		*/
+		/*	friend auto operator<=>(const Question& lhs, const Question& rhs) {
+			return tie(lhs.question,lhs.correctAnswer) <=> tie(rhs.question, rhs.correctAnswer);
+			}
+			*/
+
 };
-
 extern vector<Question> test_db;
-
 void load_questions (vector<Question> &question_db, string fileName = "questions.txt"){
 	ifstream ins (fileName);
 	if(!ins) cerr << "Error opening Questions file!\n";
@@ -112,6 +135,27 @@ void load_questions (vector<Question> &question_db, string fileName = "questions
 		test_db.push_back(temp);
 	}
 }
+/*
+
+[[nodiscard]]
+string test_question(vector<Question> &question_db, char userInput, size_t questionIndex){
+	Question temp = question_db.at(questionIndex); 
+	userInput = toupper(userInput);
+	if(userInput < 65 or userInput > 68) return "Error: BAD INPUT!";
+	return ((temp.get_answer_db().at(userInput - 65)) == temp.get_correctAnswer()) ? "True" : "False";
+}
+
+[[nodiscard]]
+bool random_question(vector<Question> &question_db){
+	int index = rand() % question_db.size();
+	Question temp = question_db.at(index); 
+	cout << temp;
+	char input = read("Please enter A) B) C) D)\n");
+	input = toupper(input);
+	if(input < 65 or input > 68) cerr << "BAD INPUT" << endl; //FIXME change this to handle bad input...
+	return ((temp.get_answer_db().at(input - 65)) == temp.get_correctAnswer()) ? true : false;
+}
+*/
 
 Question random_question(vector<Question> &question_db){
 	int index = rand() % question_db.size();
@@ -125,14 +169,3 @@ string answer_question(Question &tempQuestion, char input){
 	else return "false";
 
 }
-
-string prettyString(const string &tempString){
-	string q = tempString;
-	size_t pos = q.find("\\n");
-	while(pos != string::npos){
-		q.replace(pos, 2, "\n");
-		pos = q.find("\\n", pos + 1);
-	}
-	return q;
-}
-

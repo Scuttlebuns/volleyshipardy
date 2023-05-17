@@ -55,6 +55,10 @@ TEST(answer_question, EdgeTests){
 	EXPECT_EQ(answer_question(test_db.at(50), 'A'), "true");
 }
 
+//Function Declarations
+void titleScreen(); 
+void endScreen(Player &winner);
+
 //int main(){
 int main(int argc, char** argv) {
 	testing::InitGoogleTest(&argc, argv);
@@ -64,28 +68,72 @@ int main(int argc, char** argv) {
 	default_random_engine gen(time(0));
 	//Question Database
 	load_questions(question_db);
+	//Title Screen
+	titleScreen();
 
-	cout << ("Press '0' for debug mode\n (Press anything else to startgame)\n");
-	int x = -10;
-	cin >> x;
-	if (x == 0) return RUN_ALL_TESTS();
+	//Init Plaers, and Boards
+	Player player1("Player 1");
+	Board p1Board;
+	randomizeShips(p1Board);
+	Player player2("Player 2");
+	Board p2Board;
+	randomizeShips(p2Board);
 
-		//Init Plaers, and Boards
-		Player player1("Player 1");
-		Board p1Board;
-		randomizeShips(p1Board);
-		Player player2("Player 2");
-		Board p2Board;
-		randomizeShips(p2Board);
-
-		while (!p1Board.gameOver() or !p2Board.gameOver()){
-			jepFullRound(player1, player2, question_db);
-			if (player1.get_turn()){
-				battleshipTurn(p2Board, player1);
-			}
-			else if (player2.get_turn()){
-				battleshipTurn(p1Board, player2);
-			}
+	//Game loop
+	while (true){
+		if (p1Board.getShipsRemaining() < 1 or p2Board.getShipsRemaining() < 1) break;
+		jepFullRound(player1, player2, question_db);
+		if (player1.get_turn()){
+			battleshipTurn(p2Board, player1);
 		}
+		else if (player2.get_turn()){
+			battleshipTurn(p1Board, player2);
+		}
+	}
+
+	Player winner = player1;;
+
+	if(p1Board.getShipsRemaining() < 1){
+		winner = player2;
+	}
+	if(p2Board.getShipsRemaining() < 1){
+		winner = player1;
+	}
+	endScreen(winner);
 }
 
+void titleScreen(){
+	raw_on();
+	string toPrint = "VOLLEYSHPARDY";
+	clearscreen();
+	printBorder(); //pwint squeen
+	movecursor(ROWS/2, 0);
+	system(("echo " + toPrint + " | figlet | lolcat").c_str());
+	int x = 0;
+	cout << BLUE << ("Press 'D' for debug mode\n (Press 'S' startgame)\n") << RESET;
+	while(true){
+		x = toupper(quick_read());
+		if (x == 'D'){
+			clearscreen();
+			printBorder();
+			movecursor(2,0);
+			RUN_ALL_TESTS();
+			raw_off();
+			exit(0);
+		}
+		if (x == 'S') break;
+	}
+	raw_off();
+}
+
+void endScreen(Player &winner){
+	clearscreen();
+	printBorder();
+	string phucket = "Congrats to  ";
+	phucket + winner.get_name();
+	phucket += " for winning VOLLEYSHIPARDY!";
+	dialog(phucket);
+	usleep(2'000'000);
+	clearscreen();
+	system("cmatrix | lolcat");
+}
